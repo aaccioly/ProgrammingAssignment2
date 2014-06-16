@@ -6,14 +6,21 @@
 ## Builds a cacheable matrix out of a invertible numeric matrix.
 
 makeCacheMatrix <- function(x = matrix()) {
+  ## Variable to hold inverse matrices
   i <- NULL
+  ## Mutator for the main matrix
   set <- function(y) {
     x <<- y
+    ## Also clears the cache
     i <<- NULL
   }
+  ## Accessor for the main matrix
   get <- function() x
+  ## Mutator for the inverse matrix
   setinverse <- function(inverse) i <<- inverse
+  ## Accessor for the inverse matrix
   getinverse <- function() i
+  ## Return a list with accessors and mutators
   list(set = set, get = get,
        setinverse = setinverse,
        getinverse = getinverse)
@@ -28,13 +35,14 @@ makeCacheMatrix <- function(x = matrix()) {
 
 cacheSolve <- function(x) {
   i <- x$getinverse()
+  ## Try to retrieve the inverse matrix from the cache
   if(!is.null(i)) {
     message("getting cached data")
     return(i)
   }
   data <- x$get()
+  ## Compute, store and return a matrix that is the inverse of 'x'
   i <- solve(data)
   x$setinverse(i)
   i
 }
-
